@@ -1,0 +1,27 @@
+<svg width="1600" height="700" viewBox="0 0 1600 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="700" rx="48" fill="url(#g)"/>
+  <ellipse cx="1220" cy="360" rx="240" ry="160" fill="#FFFFFF" opacity="0.08"/>
+  <ellipse cx="1090" cy="360" rx="190" ry="130" fill="#F9A8D4" opacity="0.2"/>
+  <g filter="url(#shadow)">
+    <rect x="860" y="145" width="210" height="430" rx="42" fill="#FFFFFF"/>
+    <rect x="1045" y="175" width="190" height="390" rx="42" fill="#FDF2F8"/>
+    <path d="M910 195C910 165 930 142 962 142C994 142 1014 165 1014 195C1014 227 994 250 962 250C930 250 910 227 910 195Z" fill="#111827"/>
+    <path d="M1090 205C1090 180 1106 160 1132 160C1158 160 1174 180 1174 205C1174 232 1158 252 1132 252C1106 252 1090 232 1090 205Z" fill="#F472B6"/>
+  </g>
+  <text x="90" y="140" font-size="34" font-weight="800" fill="#FDE68A" font-family="Arial, Helvetica, sans-serif">NEW IN</text>
+  <text x="90" y="300" font-size="76" font-weight="900" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif">Fresh Fashion</text>
+  <text x="90" y="382" font-size="54" font-weight="700" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif">Picks for every day</text>
+  <text x="90" y="450" font-size="31" font-weight="500" fill="#F5F5F5" font-family="Arial, Helvetica, sans-serif">Comfortable fits, bold colors, and easy style.</text>
+  <rect x="90" y="505" width="260" height="74" rx="37" fill="#111827"/>
+  <text x="134" y="552" font-size="28" font-weight="700" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif">Shop Fashion</text>
+  <defs>
+    <filter id="shadow" x="800" y="100" width="340" height="510" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-opacity="0.26"/>
+    </filter>
+    <linearGradient id="g" x1="0" y1="0" x2="1600" y2="700" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2A1038"/>
+      <stop offset="0.55" stop-color="#7C2D52"/>
+      <stop offset="1" stop-color="#F59E0B"/>
+    </linearGradient>
+  </defs>
+</svg>
