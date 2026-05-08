@@ -1,0 +1,13 @@
+<svg width="320" height="320" viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="320" height="320" rx="28" fill="#F5F7FA"/>
+  <rect x="190" y="28" width="72" height="264" rx="36" fill="#1B1D22"/>
+  <rect x="54" y="28" width="72" height="264" rx="36" fill="#1B1D22"/>
+  <rect x="68" y="40" width="44" height="240" rx="22" fill="#2A2D33"/>
+  <rect x="204" y="40" width="44" height="240" rx="22" fill="#2A2D33"/>
+  <rect x="96" y="72" width="128" height="176" rx="36" fill="#C7CCD5" stroke="#20242A" stroke-width="8"/>
+  <rect x="108" y="84" width="104" height="152" rx="28" fill="#0F1218"/>
+  <path d="M120 120C120 107 133 96 145 96C158 96 168 106 168 120C168 135 156 147 143 147C129 147 120 137 120 120Z" fill="#59C8FF" fill-opacity="0.9"/>
+  <path d="M157 118C157 104 171 94 184 94C197 94 206 104 206 118C206 132 195 143 181 143C166 143 157 132 157 118Z" fill="#6BD4FF" fill-opacity="0.85"/>
+  <path d="M119 161C119 149 130 140 142 140C154 140 164 149 164 161C164 174 153 184 140 184C128 184 119 174 119 161Z" fill="#79D0FF" fill-opacity="0.65"/>
+  <path d="M170 158C170 148 180 140 192 140C204 140 214 148 214 158C214 170 204 180 191 180C179 180 170 170 170 158Z" fill="#A4E4FF" fill-opacity="0.65"/>
+</svg>

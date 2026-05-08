@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 
 type Product = {
   id: string;
@@ -15,6 +16,7 @@ type Product = {
   discount: string;
   accent: string;
   art: string;
+  image?: string;
   kind?: "generic" | "accessory" | "watch" | "electronics" | "psstore";
 };
 
@@ -45,8 +47,8 @@ const categoryProducts: Record<string, Product[]> = {
   "For You": [
     {
       name: "Premium Picks",
-      price: "$1,499.00",
-      oldPrice: "$1,799",
+      price: "₹1,499.00",
+      oldPrice: "₹1,799",
       brand: "Curated for you",
       seller: "Fixx Select",
       rating: "4.8",
@@ -55,11 +57,12 @@ const categoryProducts: Record<string, Product[]> = {
       discount: "12% OFF",
       accent: "from-[#f5efe4] to-[#ead8c4]",
       art: "SP",
+      id: ""
     },
     {
       name: "Daily Essentials",
-      price: "$249.00",
-      oldPrice: "$299",
+      price: "₹249.00",
+      oldPrice: "₹299",
       brand: "Top rated",
       seller: "Fixx Select",
       rating: "4.6",
@@ -68,14 +71,15 @@ const categoryProducts: Record<string, Product[]> = {
       discount: "15% OFF",
       accent: "from-[#e8f0ff] to-[#d4e1ff]",
       art: "BG",
+      id: ""
     },
   ],
   Accessories: [
     {
       kind: "accessory",
       name: "Round Diamond Pendant Necklace",
-      price: "$1,170.00",
-      oldPrice: "$1,340",
+      price: "₹1,170.00",
+      oldPrice: "₹1,340",
       brand: "THE FUTURE ROCKS",
       seller: "THE FUTURE ROCKS",
       rating: "4.9",
@@ -84,12 +88,14 @@ const categoryProducts: Record<string, Product[]> = {
       discount: "13% OFF",
       accent: "from-[#fffaf0] to-[#f5e4b8]",
       art: "D1",
+      image: "/accessories/uly.webp",
+      id: ""
     },
     {
       kind: "accessory",
       name: "14kt Gold Open Heart Pendant",
-      price: "$1,294.00",
-      oldPrice: "$1,440",
+      price: "₹1,294.00",
+      oldPrice: "₹1,440",
       brand: "Ritani",
       seller: "Ritani",
       rating: "4.8",
@@ -98,12 +104,14 @@ const categoryProducts: Record<string, Product[]> = {
       discount: "10% OFF",
       accent: "from-[#fff8ef] to-[#f0d6a0]",
       art: "H1",
+      image: "/accessories/eave.webp",
+      id: ""
     },
     {
       kind: "accessory",
       name: "Round Diamond Pendant Necklace",
-      price: "$1,170.00",
-      oldPrice: "$1,340",
+      price: "₹1,170.00",
+      oldPrice: "₹1,340",
       brand: "THE FUTURE ROCKS",
       seller: "THE FUTURE ROCKS",
       rating: "4.7",
@@ -112,12 +120,14 @@ const categoryProducts: Record<string, Product[]> = {
       discount: "13% OFF",
       accent: "from-[#f8fbff] to-[#dfe8f7]",
       art: "D2",
+      image: "/accessories/june.webp",
+      id: ""
     },
     {
       kind: "accessory",
       name: "Pacific Green Lab Diamond Pave",
-      price: "$2,195.00",
-      oldPrice: "$2,560",
+      price: "₹2,195.00",
+      oldPrice: "₹2,560",
       brand: "Brilliant Earth",
       seller: "Brilliant Earth",
       rating: "4.9",
@@ -126,12 +136,14 @@ const categoryProducts: Record<string, Product[]> = {
       discount: "14% OFF",
       accent: "from-[#f8fff7] to-[#d8f0da]",
       art: "G1",
+      image: "/accessories/may.webp",
+      id: ""
     },
     {
       kind: "accessory",
       name: "BVLGARI Serpenti Bracelet",
-      price: "$26,000.00",
-      oldPrice: "$29,000",
+      price: "₹26,000.00",
+      oldPrice: "₹29,000",
       brand: "BVLGARI",
       seller: "BVLGARI",
       rating: "4.6",
@@ -140,12 +152,14 @@ const categoryProducts: Record<string, Product[]> = {
       discount: "10% OFF",
       accent: "from-[#fff4ef] to-[#f4d1b6]",
       art: "S1",
+      image: "/accessories/jmaes.webp",
+      id: ""
     },
     {
       kind: "accessory",
       name: "Libra Zodiac Diamond Medallion Necklace",
-      price: "$1,295.00",
-      oldPrice: "$1,480",
+      price: "₹1,295.00",
+      oldPrice: "₹1,480",
       brand: "Brilliant Earth",
       seller: "Brilliant Earth",
       rating: "4.7",
@@ -154,12 +168,14 @@ const categoryProducts: Record<string, Product[]> = {
       discount: "12% OFF",
       accent: "from-[#fffbe8] to-[#f1e0a2]",
       art: "LB",
+      image: "/accessories/web.webp",
+      id: ""
     },
     {
       kind: "accessory",
       name: "67 Pave Diamond Numerology Necklace",
-      price: "$27,850.00",
-      oldPrice: "$31,000",
+      price: "₹27,850.00",
+      oldPrice: "₹31,000",
       brand: "Logan Hollowell",
       seller: "Logan Hollowell",
       rating: "4.8",
@@ -168,12 +184,14 @@ const categoryProducts: Record<string, Product[]> = {
       discount: "10% OFF",
       accent: "from-[#faf7ff] to-[#e7def9]",
       art: "67",
+      image: "/shopping.webp",
+      id: ""
     },
     {
       kind: "accessory",
       name: "Ballerina Blue Diamond Earrings",
-      price: "$590.00",
-      oldPrice: "$690",
+      price: "₹590.00",
+      oldPrice: "₹690",
       brand: "THE FUTURE ROCKS",
       seller: "THE FUTURE ROCKS",
       rating: "4.9",
@@ -182,14 +200,16 @@ const categoryProducts: Record<string, Product[]> = {
       discount: "15% OFF",
       accent: "from-[#f2fbff] to-[#d7eefc]",
       art: "B1",
+      image: "/accessories/imageas.webp",
+      id: ""
     },
   ],
   Watches: [
     {
       kind: "watch",
       name: "Sylvi Men's Imperial Analog Watch",
-      price: "$97.50",
-      oldPrice: "$195",
+      price: "₹97.50",
+      oldPrice: "₹195",
       brand: "Sylvi & more",
       seller: "Sylvi & more",
       rating: "4.2",
@@ -198,12 +218,14 @@ const categoryProducts: Record<string, Product[]> = {
       discount: "LOW PRICE",
       accent: "from-[#f5f5f3] to-[#e5e4e0]",
       art: "F1",
+      image: "/watch-images/fossil-mens-privater.svg",
+      id: ""
     },
     {
       kind: "watch",
       name: "Sonata Verve Quartz Analog Watch",
-      price: "$194.65",
-      oldPrice: "$229",
+      price: "₹194.65",
+      oldPrice: "₹229",
       brand: "Amazon.in",
       seller: "Amazon.in",
       rating: "4.9",
@@ -212,12 +234,14 @@ const categoryProducts: Record<string, Product[]> = {
       discount: "LOW PRICE",
       accent: "from-[#f6efe6] to-[#ead7be]",
       art: "RC",
+      image: "/watch-images/ralph-christian-intrepid.svg",
+      id: ""
     },
     {
       kind: "watch",
       name: "Timex Men's Round Dial Analog Watch",
-      price: "$429.00",
-      oldPrice: "$529",
+      price: "₹429.00",
+      oldPrice: "₹529",
       brand: "Amazon.in & more",
       seller: "Amazon.in & more",
       rating: "4.8",
@@ -226,12 +250,14 @@ const categoryProducts: Record<string, Product[]> = {
       discount: "LOW PRICE",
       accent: "from-[#f3f4ef] to-[#dfe4d9]",
       art: "AW",
+      image: "/watch-images/apple-watch-series-11.svg",
+      id: ""
     },
     {
       kind: "watch",
       name: "CASIO Edifice Men Digital Watch",
-      price: "$440.00",
-      oldPrice: "$550",
+      price: "₹440.00",
+      oldPrice: "₹550",
       brand: "Amazon.in",
       seller: "Amazon.in",
       rating: "4.1",
@@ -240,12 +266,14 @@ const categoryProducts: Record<string, Product[]> = {
       discount: "LOW PRICE",
       accent: "from-[#eff1f4] to-[#d7dbe2]",
       art: "MV",
+      image: "/watch-images/movado-bold-evolution.svg",
+      id: ""
     },
     {
       kind: "watch",
       name: "Noise Twist 2 Smartwatch",
-      price: "$156.00",
-      oldPrice: "$195",
+      price: "₹156.00",
+      oldPrice: "₹195",
       brand: "Noise",
       seller: "Noise",
       rating: "4.2",
@@ -254,13 +282,15 @@ const categoryProducts: Record<string, Product[]> = {
       discount: "LOW PRICE",
       accent: "from-[#f5efe4] to-[#dcc69f]",
       art: "F2",
+      image: "/watch-images/watch.webp",
+      id: ""
     },
   ],
   Electronics: [
     {
       name: "Amazon Echo Show 5 Smart Display",
-      price: "$69.99",
-      oldPrice: "$90",
+      price: "₹69.99",
+      oldPrice: "₹90",
       brand: "Home Depot & more",
       seller: "Home Depot & more",
       rating: "4.6",
@@ -270,11 +300,13 @@ const categoryProducts: Record<string, Product[]> = {
       accent: "from-[#eef0f2] to-[#d7dde5]",
       art: "ECHO5",
       kind: "electronics",
+      image: "/electronics/e8.webp",
+      id: ""
     },
     {
       name: "Amazon Echo Dot Smart Speaker with Alexa",
-      price: "$39.99",
-      oldPrice: "$50",
+      price: "₹39.99",
+      oldPrice: "₹50",
       brand: "Best Buy & more",
       seller: "Best Buy & more",
       rating: "4.7",
@@ -284,11 +316,13 @@ const categoryProducts: Record<string, Product[]> = {
       accent: "from-[#eff4fb] to-[#d5e0ef]",
       art: "DOT",
       kind: "electronics",
+      image: "/electronics/e3.webp",
+      id: ""
     },
     {
       name: "Google TV Streamer",
-      price: "$69.99",
-      oldPrice: "$100",
+      price: "₹69.99",
+      oldPrice: "₹100",
       brand: "Best Buy & more",
       seller: "Best Buy & more",
       rating: "4.3",
@@ -298,11 +332,13 @@ const categoryProducts: Record<string, Product[]> = {
       accent: "from-[#f4f2ee] to-[#e6e0d6]",
       art: "TV",
       kind: "electronics",
+      image: "/electronics/e5.webp",
+      id: ""
     },
     {
       name: "Amazon Echo Show 11 Smart Display",
-      price: "$169.99",
-      oldPrice: "$220",
+      price: "₹169.99",
+      oldPrice: "₹220",
       brand: "Electronics & more",
       seller: "Electronics & more",
       rating: "4.6",
@@ -312,11 +348,13 @@ const categoryProducts: Record<string, Product[]> = {
       accent: "from-[#eef0f3] to-[#dfe3ea]",
       art: "ECHO11",
       kind: "electronics",
+      image: "/electronics/e6.webp",
+      id: ""
     },
     {
       name: "Apple AirTag",
-      price: "$16.50",
-      oldPrice: "$29",
+      price: "₹16.50",
+      oldPrice: "₹29",
       brand: "Best Buy & more",
       seller: "Best Buy & more",
       rating: "4.8",
@@ -326,11 +364,13 @@ const categoryProducts: Record<string, Product[]> = {
       accent: "from-[#f5f5f5] to-[#e5e5e5]",
       art: "TAG",
       kind: "electronics",
+      image: "/electronics/e4.webp",
+      id: ""
     },
     {
       name: "JBL Charge 6 Portable Speaker",
-      price: "$161.34",
-      oldPrice: "$190",
+      price: "₹161.34",
+      oldPrice: "₹190",
       brand: "Excellent & more",
       seller: "Excellent & more",
       rating: "4.7",
@@ -340,11 +380,13 @@ const categoryProducts: Record<string, Product[]> = {
       accent: "from-[#f2f2f0] to-[#dbdbd8]",
       art: "JBL",
       kind: "electronics",
+      image: "/electronics/e2.webp",
+      id: ""
     },
     {
       name: "Roku Streaming Stick HD",
-      price: "$26.99",
-      oldPrice: "$30",
+      price: "₹26.99",
+      oldPrice: "₹30",
       brand: "Macy's & more",
       seller: "Macy's & more",
       rating: "4.8",
@@ -354,11 +396,13 @@ const categoryProducts: Record<string, Product[]> = {
       accent: "from-[#f0ebff] to-[#d8cbff]",
       art: "ROKU",
       kind: "electronics",
+      image: "/electronics/e7.webp",
+      id: ""
     },
     {
       name: "Microsoft Xbox Series X Console",
-      price: "$449.99",
-      oldPrice: "$480",
+      price: "₹449.99",
+      oldPrice: "₹480",
       brand: "Secret Cart",
       seller: "Secret Cart",
       rating: "4.7",
@@ -368,14 +412,16 @@ const categoryProducts: Record<string, Product[]> = {
       accent: "from-[#efefef] to-[#d8d8d8]",
       art: "XBOX",
       kind: "electronics",
+      image: "/electronics/e1.webp",
+      id: ""
     },
   ],
   "PS Stores": [
     {
       kind: "psstore",
       name: "Sony PlayStation Plus",
-      price: "$3,949",
-      oldPrice: "$4,499",
+      price: "₹3,949",
+      oldPrice: "₹4,499",
       brand: "PlayStation & more",
       seller: "PlayStation & more",
       rating: "4.9",
@@ -384,12 +430,14 @@ const categoryProducts: Record<string, Product[]> = {
       discount: "ESSENTIAL",
       accent: "from-[#f2f2f0] to-[#e6e6e2]",
       art: "PS+1",
+      image: "/ps-store/psplus-essential.webp",
+      id: ""
     },
     {
       kind: "psstore",
       name: "God Of War Digital...",
-      price: "$1,999",
-      oldPrice: "$2,499",
+      price: "₹1,999",
+      oldPrice: "₹2,499",
       brand: "PlayStation Store",
       seller: "PlayStation Store",
       rating: "5.0",
@@ -398,12 +446,14 @@ const categoryProducts: Record<string, Product[]> = {
       discount: "LOW PRICE",
       accent: "from-[#243746] to-[#0d1116]",
       art: "GOW",
+      image: "/ps-store/god-of-war.webp",
+      id: ""
     },
     {
       kind: "psstore",
       name: "Grand Theft Auto Online",
-      price: "$1,669",
-      oldPrice: "$1,999",
+      price: "₹1,669",
+      oldPrice: "₹1,999",
       brand: "PlayStation Store",
       seller: "PlayStation Store",
       rating: "4.7",
@@ -412,12 +462,14 @@ const categoryProducts: Record<string, Product[]> = {
       discount: "LOW PRICE",
       accent: "from-[#2c1d2d] to-[#101014]",
       art: "GTA",
+      image: "/ps-store/gta-online.webp",
+      id: ""
     },
     {
       kind: "psstore",
       name: "PlayStation Plus Extra...",
-      price: "$6,699",
-      oldPrice: "$7,299",
+      price: "₹6,699",
+      oldPrice: "₹7,299",
       brand: "PlayStation Store",
       seller: "PlayStation Store",
       rating: "5.0",
@@ -426,12 +478,14 @@ const categoryProducts: Record<string, Product[]> = {
       discount: "EXTRA",
       accent: "from-[#ffe24a] to-[#f0c200]",
       art: "PS+2",
+      image: "/ps-store/ghost-of-tsushima.webp",
+      id: ""
     },
     {
       kind: "psstore",
       name: "Cricket 26 - The Offici...",
-      price: "$4,399",
-      oldPrice: "$4,999",
+      price: "₹4,399",
+      oldPrice: "₹4,999",
       brand: "PlayStation Store",
       seller: "PlayStation Store",
       rating: "4.0",
@@ -440,6 +494,40 @@ const categoryProducts: Record<string, Product[]> = {
       discount: "LOW PRICE",
       accent: "from-[#1f2430] to-[#08111a]",
       art: "CR26",
+      image: "/ps-store/little-nightmares.webp",
+      id: ""
+    },
+    {
+      kind: "psstore",
+      name: "Marvel's Spider-Man...",
+      price: "â‚¹3,999",
+      oldPrice: "â‚¹4,499",
+      brand: "PlayStation Store",
+      seller: "PlayStation Store",
+      rating: "4.7",
+      reviews: "(11K)",
+      shipping: "Free next-day delivery",
+      discount: "LOW PRICE",
+      accent: "from-[#1d2436] to-[#0a0d15]",
+      art: "SPM",
+      image: "/ps-store/spider-man-miles-morales.webp",
+      id: ""
+    },
+    {
+      kind: "psstore",
+      name: "The Last of Us Part II",
+      price: "â‚¹2,499",
+      oldPrice: "â‚¹2,999",
+      brand: "PlayStation Store",
+      seller: "PlayStation Store",
+      rating: "4.8",
+      reviews: "(15K)",
+      shipping: "Free next-day delivery",
+      discount: "LOW PRICE",
+      accent: "from-[#0c1018] to-[#050608]",
+      art: "TLU2",
+      image: "/ps-store/last-of-us-part-ii.webp",
+      id: ""
     },
   ],
 };
@@ -513,22 +601,32 @@ function LogoMark() {
   );
 }
 
-function ProductCard({ product }: { product: Product }) {
+function ProductCard({
+  product,
+  onClick,
+}: {
+  product: Product;
+  onClick?: () => void;
+}) {
   if (product.kind === "electronics") {
-    return <ElectronicsCard product={product} />;
+    return <ElectronicsCard product={product} onClick={onClick} />;
   }
   if (product.kind === "psstore") {
-    return <PSStoreCard product={product} />;
+    return <PSStoreCard product={product} onClick={onClick} />;
   }
   if (product.kind === "watch") {
-    return <WatchCard product={product} />;
+    return <WatchCard product={product} onClick={onClick} />;
   }
   if (product.kind === "accessory") {
-    return <AccessoryCard product={product} />;
+    return <AccessoryCard product={product} onClick={onClick} />;
   }
 
   return (
-    <article className="group flex h-full min-h-[430px] flex-col rounded-[1.75rem] border border-stone-200 bg-white p-3 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:-translate-y-1 hover:shadow-lg">
+    <button
+      type="button"
+      onClick={onClick}
+      className="group flex h-full min-h-[430px] flex-col rounded-[1.75rem] border border-stone-200 bg-white p-3 text-left shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:-translate-y-1 hover:shadow-lg"
+    >
       <div className={`relative flex h-[290px] items-center justify-center overflow-hidden rounded-[1.5rem] bg-gradient-to-br ${product.accent}`}>
         <span className="absolute left-4 top-4 rounded-lg bg-white px-3 py-1.5 text-[0.95rem] font-medium tracking-tight text-stone-900 shadow-[0_1px_3px_rgba(0,0,0,0.14)]">
           {product.discount}
@@ -568,13 +666,23 @@ function ProductCard({ product }: { product: Product }) {
           <span>{product.reviews}</span>
         </div>
       </div>
-    </article>
+    </button>
   );
 }
 
-function PSStoreCard({ product }: { product: Product }) {
+function PSStoreCard({
+  product,
+  onClick,
+}: {
+  product: Product;
+  onClick?: () => void;
+}) {
   return (
-    <article className="group flex h-full min-h-[340px] flex-col rounded-[1.2rem] bg-white transition hover:-translate-y-1 hover:shadow-lg">
+    <button
+      type="button"
+      onClick={onClick}
+      className="group flex h-full min-h-[340px] flex-col rounded-[1.2rem] bg-white text-left transition hover:-translate-y-1 hover:shadow-lg"
+    >
       <div
         className={`relative flex h-[160px] items-center justify-center overflow-hidden rounded-[1.2rem] bg-gradient-to-br ${product.accent}`}
       >
@@ -597,7 +705,7 @@ function PSStoreCard({ product }: { product: Product }) {
           <span>{product.reviews}</span>
         </div>
       </div>
-    </article>
+    </button>
   );
 }
 
@@ -659,32 +767,45 @@ function PSStoreVisual({ kind }: { kind: string }) {
   }
 }
 
-function AccessoryCard({ product }: { product: Product }) {
+function AccessoryCard({
+  product,
+  onClick,
+}: {
+  product: Product;
+  onClick?: () => void;
+}) {
   return (
-    <article className="group flex h-full min-h-[322px] flex-col rounded-[1.35rem] bg-white transition hover:-translate-y-1 hover:shadow-lg">
+    <button
+      type="button"
+      onClick={onClick}
+      className="group flex h-full min-h-[360px] flex-col rounded-[1.5rem] bg-white text-left transition hover:-translate-y-1 hover:shadow-lg"
+    >
       <div
-        className={`relative flex h-[154px] items-center justify-center overflow-hidden rounded-[1.35rem] bg-white bg-gradient-to-br ${product.accent}`}
+        className={`relative flex h-[178px] items-center justify-center overflow-hidden rounded-[1.5rem] bg-gradient-to-br ${product.accent}`}
       >
-        <span className="absolute left-2 top-2 rounded-md bg-white/95 px-2 py-1 text-[0.78rem] font-medium tracking-tight text-stone-800 shadow-[0_1px_3px_rgba(0,0,0,0.12)]">
+        <span className="absolute left-3 top-3 rounded-md bg-white/95 px-2.5 py-1 text-[0.78rem] font-medium tracking-tight text-stone-800 shadow-[0_1px_3px_rgba(0,0,0,0.12)]">
           {product.discount}
         </span>
-        <AccessoryVisual kind={product.art} />
+        {product.image ? (
+          <img
+            src={product.image}
+            alt={product.name}
+            className="h-full w-full object-cover p-2"
+          />
+        ) : (
+          <AccessoryVisual kind={product.art} />
+        )}
       </div>
 
-      <div className="px-1 pt-2">
-        <h3 className="line-clamp-2 min-h-[3.1rem] text-[0.98rem] leading-[1.25] text-stone-800 transition group-hover:text-blue-700">
+      <div className="px-1 pt-3">
+        <h3 className="line-clamp-2 min-h-[3.1rem] text-[1rem] leading-[1.28] text-stone-800 transition group-hover:text-blue-700">
           {product.name}
         </h3>
-        <p className="mt-1 text-[0.95rem] font-medium text-stone-900">{product.price}</p>
-        <div className="mt-1 flex items-center gap-1 text-[0.9rem] text-stone-500">
-          <span className="inline-flex h-4 w-4 items-center justify-center rounded-sm bg-amber-400 text-[0.65rem] font-bold text-white">
-            a
-          </span>
-          <span>{product.brand}</span>
-        </div>
-        <div className="mt-1 text-[0.9rem] text-stone-500">{product.shipping}</div>
+        <p className="mt-2 text-[1rem] font-semibold text-stone-900">{product.price}</p>
+        <p className="mt-1 text-[0.92rem] text-stone-500">{product.brand}</p>
+        <div className="mt-1 text-[0.92rem] text-stone-500">{product.shipping}</div>
       </div>
-    </article>
+    </button>
   );
 }
 
@@ -692,73 +813,91 @@ function AccessoryVisual({ kind }: { kind: string }) {
   switch (kind) {
     case "D1":
       return (
-        <div className="relative h-[150px] w-full">
-          <div className="absolute left-1/2 top-7 h-[100px] w-[100px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_35%_30%,#4b3a2b_0%,#1a120d_70%)]" />
-          <div className="absolute left-1/2 top-2 h-[72px] w-[120px] -translate-x-1/2 rounded-full border border-stone-500 bg-[linear-gradient(180deg,#6f7c8f,#2f3640)]" />
+        <div className="relative h-[168px] w-full">
+          <div className="absolute left-1/2 top-[32px] h-[92px] w-[92px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_35%_30%,#4b3a2b_0%,#1a120d_70%)]" />
+          <div className="absolute left-1/2 top-[10px] h-[78px] w-[124px] -translate-x-1/2 rounded-[2rem] border border-stone-500 bg-[linear-gradient(180deg,#6f7c8f,#2f3640)] shadow-[0_12px_26px_rgba(0,0,0,0.08)]" />
         </div>
       );
     case "H1":
       return (
-        <div className="relative h-[150px] w-full">
-          <div className="absolute left-1/2 top-6 h-[108px] w-[108px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_50%_30%,#d4a86a_0%,#7d5532_72%)] opacity-70" />
-          <div className="absolute left-1/2 top-1 h-[92px] w-[94px] -translate-x-1/2 rounded-[2rem] bg-[linear-gradient(180deg,#efe6d3,#c8a96f)]" />
+        <div className="relative h-[168px] w-full">
+          <div className="absolute left-1/2 top-[30px] h-[100px] w-[100px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_50%_30%,#d4a86a_0%,#7d5532_72%)] opacity-70" />
+          <div className="absolute left-1/2 top-[12px] h-[88px] w-[98px] -translate-x-1/2 rounded-[2rem] bg-[linear-gradient(180deg,#efe6d3,#c8a96f)] shadow-[0_12px_26px_rgba(0,0,0,0.08)]" />
         </div>
       );
     case "D2":
       return (
-        <div className="relative h-[150px] w-full">
-          <div className="absolute left-1/2 top-6 h-[102px] w-[102px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_35%_30%,#edf3fb_0%,#c8d5ea_72%)]" />
-          <div className="absolute left-1/2 top-3 h-[76px] w-[118px] -translate-x-1/2 rounded-full border border-white/70 bg-white/30" />
+        <div className="relative h-[168px] w-full">
+          <div className="absolute left-1/2 top-[28px] h-[98px] w-[98px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_35%_30%,#edf3fb_0%,#c8d5ea_72%)]" />
+          <div className="absolute left-1/2 top-[12px] h-[78px] w-[120px] -translate-x-1/2 rounded-full border border-white/70 bg-white/30" />
         </div>
       );
     case "G1":
       return (
-        <div className="relative h-[150px] w-full">
-          <div className="absolute left-1/2 top-6 h-[104px] w-[124px] -translate-x-1/2 rounded-[1.8rem] bg-[linear-gradient(180deg,#e6f1e2,#b7d3b3)]" />
-          <div className="absolute left-1/2 top-1 h-[90px] w-[88px] -translate-x-1/2 rounded-full bg-[#6c6a2c] opacity-70" />
+        <div className="relative h-[168px] w-full">
+          <div className="absolute left-1/2 top-[28px] h-[102px] w-[126px] -translate-x-1/2 rounded-[1.8rem] bg-[linear-gradient(180deg,#e6f1e2,#b7d3b3)]" />
+          <div className="absolute left-1/2 top-[8px] h-[90px] w-[90px] -translate-x-1/2 rounded-full bg-[#6c6a2c] opacity-70" />
         </div>
       );
     case "S1":
       return (
-        <div className="relative h-[150px] w-full">
-          <div className="absolute left-1/2 top-6 h-[108px] w-[108px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_35%_30%,#f7e7d9_0%,#d79f68_72%)]" />
-          <div className="absolute left-1/2 top-1 h-[90px] w-[90px] -translate-x-1/2 rounded-[2rem] border border-stone-300 bg-[linear-gradient(180deg,#fff6ef,#efd3b6)]" />
+        <div className="relative h-[168px] w-full">
+          <div className="absolute left-1/2 top-[28px] h-[102px] w-[102px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_35%_30%,#f7e7d9_0%,#d79f68_72%)]" />
+          <div className="absolute left-1/2 top-[10px] h-[90px] w-[90px] -translate-x-1/2 rounded-[2rem] border border-stone-300 bg-[linear-gradient(180deg,#fff6ef,#efd3b6)] shadow-[0_12px_26px_rgba(0,0,0,0.08)]" />
         </div>
       );
     case "LB":
       return (
-        <div className="relative h-[150px] w-full">
-          <div className="absolute left-1/2 top-3 h-[118px] w-[18px] -translate-x-1/2 rounded-full bg-[#d9c26a]" />
-          <div className="absolute left-1/2 top-10 h-[68px] w-[68px] -translate-x-1/2 rounded-full border border-stone-200 bg-[radial-gradient(circle_at_35%_30%,#f7f0ba_0%,#c7ae51_72%)]" />
+        <div className="relative h-[168px] w-full">
+          <div className="absolute left-1/2 top-[16px] h-[120px] w-[18px] -translate-x-1/2 rounded-full bg-[#d9c26a]" />
+          <div className="absolute left-1/2 top-[44px] h-[72px] w-[72px] -translate-x-1/2 rounded-full border border-stone-200 bg-[radial-gradient(circle_at_35%_30%,#f7f0ba_0%,#c7ae51_72%)]" />
         </div>
       );
     case "67":
       return (
-        <div className="relative h-[150px] w-full">
-          <div className="absolute left-1/2 top-2 h-[126px] w-[112px] -translate-x-1/2 rounded-full border border-stone-200 bg-[radial-gradient(circle_at_50%_25%,#f3eefc_0%,#d6cbe7_72%)]" />
-          <div className="absolute left-1/2 top-7 h-[82px] w-[82px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_35%_30%,#f8f5ff_0%,#c8bddb_72%)]" />
+        <div className="relative h-[168px] w-full">
+          <div className="absolute left-1/2 top-[8px] h-[128px] w-[112px] -translate-x-1/2 rounded-full border border-stone-200 bg-[radial-gradient(circle_at_50%_25%,#f3eefc_0%,#d6cbe7_72%)]" />
+          <div className="absolute left-1/2 top-[30px] h-[86px] w-[86px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_35%_30%,#f8f5ff_0%,#c8bddb_72%)]" />
         </div>
       );
     case "B1":
       return (
-        <div className="relative h-[150px] w-full">
-          <div className="absolute left-1/2 top-6 h-[96px] w-[96px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_35%_30%,#ccecff_0%,#83c4e8_72%)]" />
-          <div className="absolute left-1/2 top-1 h-[118px] w-[20px] -translate-x-1/2 rounded-full bg-[#d5dce7]" />
+        <div className="relative h-[168px] w-full">
+          <div className="absolute left-1/2 top-[28px] h-[98px] w-[98px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_35%_30%,#ccecff_0%,#83c4e8_72%)]" />
+          <div className="absolute left-1/2 top-[8px] h-[124px] w-[20px] -translate-x-1/2 rounded-full bg-[#d5dce7]" />
         </div>
       );
     default:
-      return <div className="h-[150px] w-full" />;
+      return <div className="h-[168px] w-full" />;
   }
 }
 
-function ElectronicsCard({ product }: { product: Product }) {
+function ElectronicsCard({
+  product,
+  onClick,
+}: {
+  product: Product;
+  onClick?: () => void;
+}) {
   return (
-    <article className="group flex h-full flex-col rounded-[1.25rem] bg-white p-2 shadow-[0_1px_0_rgba(0,0,0,0.03)] ring-1 ring-stone-200 transition hover:-translate-y-1 hover:shadow-lg">
+    <button
+      type="button"
+      onClick={onClick}
+      className="group flex h-full flex-col rounded-[1.25rem] bg-white p-2 text-left shadow-[0_1px_0_rgba(0,0,0,0.03)] ring-1 ring-stone-200 transition hover:-translate-y-1 hover:shadow-lg"
+    >
       <div className={`relative flex h-48 items-center justify-center overflow-hidden rounded-[1rem] bg-gradient-to-br ${product.accent}`}>
         <span className="absolute left-3 top-3 rounded-md bg-white/95 px-2 py-1 text-[0.9rem] font-semibold tracking-tight text-stone-700 shadow-sm">
           {product.discount}
         </span>
-        <ElectronicsVisual kind={product.art} />
+        {product.image ? (
+          <img
+            src={product.image}
+            alt={product.name}
+            className="h-full w-full object-contain p-2"
+          />
+        ) : (
+          <ElectronicsVisual kind={product.art} />
+        )}
       </div>
 
       <div className="px-0 pt-3">
@@ -782,48 +921,63 @@ function ElectronicsCard({ product }: { product: Product }) {
           <span>{product.reviews}</span>
         </div>
       </div>
-    </article>
+    </button>
   );
 }
 
-function WatchCard({ product }: { product: Product }) {
+function WatchCard({
+  product,
+  onClick,
+}: {
+  product: Product;
+  onClick?: () => void;
+}) {
   return (
-    <article className="group flex h-full min-h-[430px] flex-col rounded-[1.75rem] border border-stone-200 bg-white p-3 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:-translate-y-1 hover:shadow-lg">
+    <button
+      type="button"
+      onClick={onClick}
+      className="group flex h-full min-h-[470px] flex-col bg-white text-left transition hover:-translate-y-1"
+    >
       <div
-        className={`relative flex h-[290px] items-center justify-center overflow-hidden rounded-[1.5rem] bg-gradient-to-br ${product.accent}`}
+        className={`relative flex h-[230px] items-center justify-center overflow-hidden rounded-[1rem] bg-white ${product.accent}`}
       >
-        <span className="absolute left-4 top-4 rounded-lg bg-white px-3 py-1.5 text-[0.95rem] font-medium tracking-tight text-stone-900 shadow-[0_1px_3px_rgba(0,0,0,0.14)]">
+        <span className="absolute left-3 top-3 rounded-lg bg-white px-3 py-1.5 text-[0.92rem] font-semibold tracking-tight text-stone-800 shadow-[0_1px_3px_rgba(0,0,0,0.14)]">
           {product.discount}
         </span>
-        <WatchVisual kind={product.art} />
+        {product.image ? (
+          <img
+            src={product.image}
+            alt={product.name}
+            className="h-full w-full object-cover p-2"
+          />
+        ) : (
+          <WatchVisual kind={product.art} />
+        )}
       </div>
 
-      <div className="mt-4 flex flex-1 flex-col px-1 pb-1">
-        <h3 className="line-clamp-2 min-h-[3.1rem] max-w-[225px] text-[1.12rem] leading-[1.25] text-[#1749ff] transition group-hover:text-blue-700">
+      <div className="flex flex-1 flex-col px-2 pb-1 pt-3">
+        <h3 className="line-clamp-2 min-h-[3.6rem] max-w-[210px] text-[1.08rem] leading-[1.35] text-stone-900 transition group-hover:text-blue-700">
           {product.name}
         </h3>
-        <div className="mt-4 flex items-baseline gap-2">
-          <p className="text-[1.15rem] font-semibold text-emerald-700">{product.price}</p>
-          <p className="text-[0.95rem] text-stone-500 line-through">{product.oldPrice}</p>
+        <div className="mt-2 flex items-baseline gap-2">
+          <p className="text-[1.08rem] font-semibold text-emerald-700">{product.price}</p>
+          <p className="text-[0.98rem] text-stone-500 line-through">{product.oldPrice}</p>
         </div>
-        <p className="mt-2 text-[0.95rem] text-stone-500">{product.brand}</p>
         <div className="mt-2 flex items-center gap-2 text-[0.95rem] text-stone-600">
-          <span className="inline-flex h-6 w-6 items-center justify-center rounded-sm bg-stone-100 text-[0.9rem] font-semibold text-stone-900">
-            {product.seller.slice(0, 1).toUpperCase()}
+          <span className="inline-flex h-5 w-5 items-center justify-center rounded-[0.2rem] bg-amber-400 text-[0.68rem] font-bold text-white">
+            a
           </span>
           <span>{product.seller}</span>
         </div>
 
-        <div className="mt-4 flex items-center gap-2 text-[0.95rem] text-stone-500">
-          <span>{product.shipping}</span>
-        </div>
-        <div className="mt-2 flex items-center gap-1 text-[0.95rem] text-stone-600">
+        <div className="mt-2 text-[0.95rem] text-stone-600">{product.shipping}</div>
+        <div className="mt-1 flex items-center gap-1 text-[0.95rem] text-stone-600">
           <span>{product.rating}</span>
-          <span className="text-amber-500">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <span className="text-amber-500">★★★★★</span>
           <span>{product.reviews}</span>
         </div>
       </div>
-    </article>
+    </button>
   );
 }
 
@@ -831,47 +985,50 @@ function WatchVisual({ kind }: { kind: string }) {
   switch (kind) {
     case "F1":
       return (
-        <div className="relative flex h-[228px] w-[150px] items-center justify-center">
-          <div className="absolute top-2 h-[204px] w-[112px] rounded-[2rem] border border-stone-200 bg-[linear-gradient(180deg,#fafafa,#dcdde0)] shadow-[0_22px_40px_rgba(0,0,0,0.08)]" />
-          <div className="absolute h-[136px] w-[136px] rounded-full border-[10px] border-[#8f8f92] bg-[#17181c] shadow-[inset_0_0_0_8px_rgba(255,255,255,0.04)]" />
-          <div className="absolute h-[108px] w-[108px] rounded-full border border-stone-700 bg-[radial-gradient(circle_at_50%_50%,#2d3138_0%,#111318_75%)]" />
+        <div className="relative flex h-[210px] w-[150px] items-center justify-center">
+          <div className="absolute top-1 h-[188px] w-[56px] rounded-[1.4rem] bg-[linear-gradient(180deg,#e8e8ea,#bdbfc4)] shadow-[0_16px_26px_rgba(0,0,0,0.08)]" />
+          <div className="absolute top-[18px] h-[132px] w-[132px] rounded-full border-[10px] border-[#76787d] bg-[#17181c] shadow-[inset_0_0_0_8px_rgba(255,255,255,0.04)]" />
+          <div className="absolute top-[36px] h-[96px] w-[96px] rounded-full border border-[#233a5f] bg-[radial-gradient(circle_at_50%_50%,#2d67aa_0%,#12243c_75%)]" />
+          <div className="absolute top-[68px] h-[34px] w-[34px] rounded-full border-[6px] border-[#274b7c] bg-[#0f1724]" />
         </div>
       );
     case "RC":
       return (
-        <div className="relative flex h-[228px] w-[150px] items-center justify-center">
-          <div className="absolute top-2 h-[206px] w-[112px] rounded-[2rem] border border-[#6a4638] bg-[linear-gradient(180deg,#8d5a46,#5d3527)] shadow-[0_22px_40px_rgba(0,0,0,0.08)]" />
-          <div className="absolute h-[136px] w-[136px] rounded-full border-[10px] border-[#2d2f33] bg-[#16202d] shadow-[inset_0_0_0_8px_rgba(255,255,255,0.04)]" />
-          <div className="absolute h-[104px] w-[104px] rounded-full border border-[#33455e] bg-[radial-gradient(circle_at_50%_50%,#243244_0%,#11161f_72%)]" />
+        <div className="relative flex h-[210px] w-[150px] items-center justify-center">
+          <div className="absolute top-1 h-[184px] w-[54px] rounded-[1.3rem] bg-[linear-gradient(180deg,#946247,#6a412f)] shadow-[0_16px_26px_rgba(0,0,0,0.08)]" />
+          <div className="absolute top-[20px] h-[128px] w-[128px] rounded-full border-[10px] border-[#2d2f33] bg-[#16202d] shadow-[inset_0_0_0_8px_rgba(255,255,255,0.04)]" />
+          <div className="absolute top-[40px] h-[88px] w-[88px] rounded-full border border-[#33455e] bg-[radial-gradient(circle_at_50%_50%,#243244_0%,#11161f_72%)]" />
+          <div className="absolute top-[69px] h-[24px] w-[24px] rounded-full border-[5px] border-[#d4b36b] bg-[#f3d98a]" />
         </div>
       );
     case "AW":
       return (
-        <div className="relative flex h-[228px] w-[170px] items-center justify-center">
-          <div className="absolute left-8 h-[196px] w-[128px] rounded-[2rem] border border-stone-200 bg-white shadow-[0_22px_40px_rgba(0,0,0,0.08)]" />
-          <div className="absolute left-12 h-[178px] w-[100px] rounded-[1.6rem] bg-[#efefe8] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.65)]" />
-          <div className="absolute left-[58px] h-[152px] w-[76px] rounded-[1rem] bg-[linear-gradient(180deg,#ffdfd8,#f6f0e7)]" />
+        <div className="relative flex h-[210px] w-[170px] items-center justify-center">
+          <div className="absolute left-[26px] top-[14px] h-[182px] w-[118px] rounded-[2rem] bg-[#f3f3f0] shadow-[0_16px_26px_rgba(0,0,0,0.08)]" />
+          <div className="absolute left-[56px] top-[24px] h-[156px] w-[58px] rounded-[1.2rem] bg-[linear-gradient(180deg,#d7e8f7,#9ed4f4)]" />
+          <div className="absolute left-[44px] top-[40px] h-[24px] w-[84px] rounded-full bg-[#1b1f25]" />
+          <div className="absolute left-[76px] top-[54px] h-[78px] w-[18px] rounded-full bg-[#d7e7fa]" />
         </div>
       );
     case "MV":
       return (
-        <div className="relative flex h-[228px] w-[150px] items-center justify-center">
-          <div className="absolute top-2 h-[206px] w-[112px] rounded-[2rem] border border-[#3e4044] bg-[#202428] shadow-[0_22px_40px_rgba(0,0,0,0.08)]" />
-          <div className="absolute h-[136px] w-[136px] rounded-full border-[10px] border-[#70757d] bg-[#1f2329] shadow-[inset_0_0_0_8px_rgba(255,255,255,0.04)]" />
-          <div className="absolute h-[104px] w-[104px] rounded-full border border-[#6f737a] bg-[radial-gradient(circle_at_50%_50%,#31353b_0%,#171a1f_72%)]" />
+        <div className="relative flex h-[210px] w-[150px] items-center justify-center">
+          <div className="absolute top-1 h-[184px] w-[54px] rounded-[1.3rem] bg-[linear-gradient(180deg,#9a623f,#603829)] shadow-[0_16px_26px_rgba(0,0,0,0.08)]" />
+          <div className="absolute top-[20px] h-[128px] w-[128px] rounded-full border-[10px] border-[#2d2f33] bg-[#121417] shadow-[inset_0_0_0_8px_rgba(255,255,255,0.04)]" />
+          <div className="absolute top-[40px] h-[88px] w-[88px] rounded-full border border-[#1f2126] bg-[radial-gradient(circle_at_50%_50%,#373d45_0%,#171a1f_72%)]" />
         </div>
       );
     case "F2":
       return (
-        <div className="relative flex h-[228px] w-[150px] items-center justify-center">
-          <div className="absolute top-2 h-[206px] w-[112px] rounded-[2rem] border border-stone-300 bg-[#222629] shadow-[0_22px_40px_rgba(0,0,0,0.08)]" />
-          <div className="absolute h-[136px] w-[136px] rounded-full border-[10px] border-[#44484d] bg-[#0f1014] shadow-[inset_0_0_0_8px_rgba(255,255,255,0.04)]" />
-          <div className="absolute h-[104px] w-[104px] rounded-full border border-[#54585d] bg-[radial-gradient(circle_at_50%_50%,#202329_0%,#090a0d_72%)]" />
+        <div className="relative flex h-[210px] w-[150px] items-center justify-center">
+          <div className="absolute top-1 h-[184px] w-[54px] rounded-[1.3rem] bg-[linear-gradient(180deg,#f7d76f,#d4b952)] shadow-[0_16px_26px_rgba(0,0,0,0.08)]" />
+          <div className="absolute top-[20px] h-[128px] w-[128px] rounded-full border-[10px] border-[#44484d] bg-[#0f1014] shadow-[inset_0_0_0_8px_rgba(255,255,255,0.04)]" />
+          <div className="absolute top-[40px] h-[88px] w-[88px] rounded-full border border-[#54585d] bg-[radial-gradient(circle_at_50%_50%,#202329_0%,#090a0d_72%)]" />
         </div>
       );
     default:
       return (
-        <div className="relative flex h-[228px] w-[150px] items-center justify-center">
+        <div className="relative flex h-[210px] w-[150px] items-center justify-center">
           <div className="rounded-[2rem] bg-white/70 px-4 py-2 text-sm font-semibold text-stone-700 shadow-sm">
             Watch
           </div>
@@ -959,12 +1116,153 @@ function FooterIcon({ label }: { label: string }) {
   );
 }
 
+function ProductDetailsModal({
+  product,
+  onClose,
+}: {
+  product: Product;
+  onClose: () => void;
+}) {
+  const description =
+    product.kind === "watch"
+      ? "A featured watch pick with a clean display, everyday wearability, and a premium look."
+      : product.kind === "accessory"
+        ? "A selected accessory with a polished finish and a style-led design suitable for daily wear."
+        : product.kind === "electronics"
+          ? "A practical and popular electronics item chosen for convenience, utility, and modern styling."
+          : "A highlighted product from the collection with balanced design and strong value.";
+
+  const specifications = [
+    `Category: ${product.kind ? product.kind.charAt(0).toUpperCase() + product.kind.slice(1) : "General"}`,
+    `Brand: ${product.brand}`,
+    `Seller: ${product.seller}`,
+    `Shipping: ${product.shipping}`,
+  ];
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 px-4 py-6">
+      <div className="w-full max-w-2xl overflow-hidden rounded-[1.5rem] bg-white shadow-2xl">
+        <div className="flex items-center justify-between border-b border-stone-200 px-5 py-4">
+          <h2 className="text-lg font-semibold text-stone-900">Product Details</h2>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-full px-3 py-1 text-sm font-medium text-stone-600 hover:bg-stone-100"
+          >
+            Close
+          </button>
+        </div>
+        <div className="grid gap-6 p-5 md:grid-cols-[240px_1fr]">
+          <div className="rounded-[1.25rem] bg-stone-50 p-4">
+            {product.image ? (
+              <img src={product.image} alt={product.name} className="h-56 w-full object-contain" />
+            ) : (
+              <div className="flex h-56 items-center justify-center rounded-[1rem] bg-gradient-to-br from-stone-100 to-stone-200 text-2xl font-bold text-stone-500">
+                {product.art}
+              </div>
+            )}
+          </div>
+          <div>
+            <p className="text-sm uppercase tracking-[0.2em] text-stone-500">{product.brand}</p>
+            <h3 className="mt-2 text-2xl font-semibold tracking-tight text-stone-900">{product.name}</h3>
+            <div className="mt-4 flex items-baseline gap-3">
+              <span className="text-2xl font-bold text-emerald-700">{product.price}</span>
+              <span className="text-lg text-stone-500 line-through">{product.oldPrice}</span>
+            </div>
+            <div className="mt-5 rounded-[1.1rem] bg-stone-50 p-4">
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-stone-500">
+                Description
+              </p>
+              <p className="mt-2 text-sm leading-6 text-stone-700">{description}</p>
+            </div>
+            <div className="mt-4 grid gap-4 md:grid-cols-2">
+              <div className="rounded-[1.1rem] border border-stone-200 p-4">
+                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-stone-500">
+                  Specifications
+                </p>
+                <ul className="mt-3 space-y-2 text-sm text-stone-700">
+                  {specifications.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="rounded-[1.1rem] border border-stone-200 p-4">
+                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-stone-500">
+                  Rating
+                </p>
+                <div className="mt-3 flex items-center gap-3">
+                  <span className="text-3xl font-bold text-stone-900">{product.rating}</span>
+                  <div className="text-amber-500">★★★★★</div>
+                  <span className="text-sm text-stone-500">{product.reviews}</span>
+                </div>
+              </div>
+            </div>
+            <div className="mt-4 rounded-[1.1rem] border border-stone-200 p-4">
+              <div className="grid gap-3 text-sm text-stone-700 sm:grid-cols-2">
+                <p><span className="font-medium text-stone-800">MRP:</span> {product.oldPrice}</p>
+                <p><span className="font-medium text-stone-800">Price:</span> {product.price}</p>
+                <p><span className="font-medium text-stone-800">Seller:</span> {product.seller}</p>
+                <p><span className="font-medium text-stone-800">Shipping:</span> {product.shipping}</p>
+              </div>
+            </div>
+            <div className="mt-6">
+              <button
+                type="button"
+                className="rounded-full bg-stone-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-stone-800"
+              >
+                Buy Now
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function HomePage() {
   const [activeCategory, setActiveCategory] = useState("Accessories");
   const [activeSlide, setActiveSlide] = useState(0);
+  const [currentUser, setCurrentUser] = useState("");
+  const router = useRouter();
 
   const products = useMemo(() => categoryProducts[activeCategory] ?? [], [activeCategory]);
   const slide = featuredSlides[activeSlide % featuredSlides.length];
+
+  const openProduct = (product: Product, index: number) => {
+    const slug = `${activeCategory}-${product.name}-${index}`
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+
+    router.push(`/product/${slug}`);
+  };
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setActiveSlide((currentSlide) => (currentSlide + 1) % featuredSlides.length);
+    }, 3000);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const syncCurrentUser = () => {
+      try {
+        const stored = window.localStorage.getItem("fixx-current-user");
+        setCurrentUser(stored ?? "");
+      } catch {
+        setCurrentUser("");
+      }
+    };
+
+    syncCurrentUser();
+    window.addEventListener("storage", syncCurrentUser);
+
+    return () => {
+      window.removeEventListener("storage", syncCurrentUser);
+    };
+  }, []);
 
   return (
     <main className="min-h-screen bg-[#fbfaf7] text-stone-900">
@@ -987,12 +1285,13 @@ export default function HomePage() {
 
           <div className="flex items-center justify-end gap-3">
             <div className="hidden h-7 w-px bg-stone-200 sm:block" />
-            <a href="#" className="text-sm font-medium text-stone-700 hover:text-black">
-              Login
+            <a href="/login" className="text-sm font-medium text-stone-700 hover:text-black">
+              {currentUser ? currentUser : "Login"}
             </a>
             <button
               type="button"
               aria-label="Wishlist"
+              onClick={() => router.push("/wishlist")}
               className="inline-flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-stone-100"
             >
               <HeartIcon />
@@ -1000,6 +1299,7 @@ export default function HomePage() {
             <button
               type="button"
               aria-label="Cart"
+              onClick={() => router.push("/cart")}
               className="inline-flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-stone-100"
             >
               <BagIcon />
@@ -1062,9 +1362,8 @@ export default function HomePage() {
                         type="button"
                         aria-label={`Show featured slide ${index + 1}`}
                         onClick={() => setActiveSlide(index)}
-                        className={`h-2.5 rounded-full transition ${
-                          index === activeSlide ? "w-8 bg-stone-900" : "w-2.5 bg-stone-300"
-                        }`}
+                        className={`h-2.5 rounded-full transition ${index === activeSlide ? "w-8 bg-stone-900" : "w-2.5 bg-stone-300"
+                          }`}
                       />
                     ))}
                   </div>
@@ -1099,7 +1398,11 @@ export default function HomePage() {
 
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {products.map((product, index) => (
-              <ProductCard key={`${activeCategory}-${product.name}-${index}`} product={product} />
+              <ProductCard
+                key={`${activeCategory}-${product.name}-${index}`}
+                product={product}
+                onClick={() => openProduct(product, index)}
+              />
             ))}
           </div>
         </div>
@@ -1235,6 +1538,3 @@ export default function HomePage() {
     </main>
   );
 }
-
-
-
