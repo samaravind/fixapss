@@ -1,7 +1,23 @@
 "use client";
-import { Product } from "./page";
 
-export const categoryProducts: Record<string, Product[]> = {
+type CategoryProduct = {
+    name: string;
+    price: string;
+    oldPrice: string;
+    brand: string;
+    seller: string;
+    rating: string;
+    reviews: string;
+    shipping: string;
+    discount: string;
+    accent: string;
+    art: string;
+    image?: string;
+    kind?: string;
+    id: string;
+};
+
+export const categoryProducts: Record<string, CategoryProduct[]> = {
     "For You": [
         {
             name: "Premium Picks",
@@ -433,6 +449,68 @@ export const categoryProducts: Record<string, Product[]> = {
             discount: "LOW PRICE",
             accent: "from-[#1f2430] to-[#08111a]",
             art: "CR26",
+            id: ""
+        },
+    ],
+    "PS Games": [
+        {
+            kind: "psstore",
+            name: "Sony PlayStation Plus Essential",
+            price: "₹3,949",
+            oldPrice: "₹4,499",
+            brand: "PlayStation Store",
+            seller: "PlayStation Store",
+            rating: "4.9",
+            reviews: "(8K)",
+            shipping: "Free next-day delivery",
+            discount: "ESSENTIAL",
+            accent: "from-[#0a2942] to-[#1a4a7a]",
+            art: "PS+1",
+            id: ""
+        },
+        {
+            kind: "psstore",
+            name: "God Of War Ragnarök",
+            price: "₹2,499",
+            oldPrice: "₹3,499",
+            brand: "PlayStation Store",
+            seller: "PlayStation Store",
+            rating: "4.9",
+            reviews: "(15K)",
+            shipping: "Free delivery",
+            discount: "29% OFF",
+            accent: "from-[#243746] to-[#0d1116]",
+            art: "GOW",
+            id: ""
+        },
+        {
+            kind: "psstore",
+            name: "Marvel's Spider-Man 2",
+            price: "₹3,999",
+            oldPrice: "₹4,499",
+            brand: "PlayStation Store",
+            seller: "PlayStation Store",
+            rating: "4.8",
+            reviews: "(12K)",
+            shipping: "Free delivery",
+            discount: "11% OFF",
+            accent: "from-[#1f2430] to-[#08111a]",
+            art: "SPM",
+            id: ""
+        },
+        {
+            kind: "psstore",
+            name: "PlayStation Plus Extra",
+            price: "₹6,699",
+            oldPrice: "₹7,299",
+            brand: "PlayStation Store",
+            seller: "PlayStation Store",
+            rating: "5.0",
+            reviews: "(1K)",
+            shipping: "Free delivery",
+            discount: "EXTRA",
+            accent: "from-[#ffe24a] to-[#f0c200]",
+            art: "PS+2",
             id: ""
         },
     ],
